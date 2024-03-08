@@ -1,9 +1,14 @@
 const User = require("../models/usermodel");
 const jwt = require("jsonwebtoken");
 
-const protectUser = async (req, res, _next, expectedRole) => {
+const protectUser = async (req, res, next, expectedRole) => {
   try {
-    console.log("bolo bhai");
+    if (req.path === '/home' || req.path === '/login') {
+      req.oidc.unless({ path: ["/", ,"/home" ,"/UserLogin"] });
+    }
+
+    const user = await User.findById(req.oidc.user.sub); // Define the user variable
+
     if (!user) {
       return res.status(401).json({ message: "Invalid user" });
     }
@@ -18,6 +23,7 @@ const protectUser = async (req, res, _next, expectedRole) => {
     console.error(error);
     res.status(401).json({ message: "Authorization failed" });
   }
+  next();
 };
 
 const redirectToDashboard = (res, role) => {

@@ -36,6 +36,23 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+// Auth0 configuration backend side
+app.use(
+  auth({
+    authRequired: true, // Set to true to protect all routes by default
+    auth0Logout: true,
+    issuerBaseURL: 'jaysite.us.auth0.com', // Replace with your Auth0 Domain
+    baseURL: 'http://localhost:4000', // Replace with your server base URL
+    clientID: 'AVLmhHYAlnrpwCaYWfvOc3anmbT66hF2', // Replace with your Client ID
+    secret: '7n7jhX6W5--Sb-HsD_KECb4hpr6jxLTLv9_XZTQkkmG8E10gVU2WnYZAL2bsX3LO', // Replace with your Client Secret
+  })
+);
+
+// Public routes
+app.use("/home", (req, res, next) => {
+  req.oidc.isAuthenticated() ? next() : res.redirect("/login");
+});
+
 // Define routes
 app.use("/admin", adminRoutes);
 app.use("/projectmanager", pmRoutes);
@@ -47,7 +64,6 @@ app.get("/api/user", async (req, res) => {
   res.status(200).json({ userId: req.oidc.user.sub, name: user.name });
 });
 
-// Define API endpoints
 app.get("/api/userRole", async (req, res) => {
   const { email } = req.query;
 
@@ -56,7 +72,6 @@ app.get("/api/userRole", async (req, res) => {
 
     if (user) {
       console.log("User role:", user.role);
-
       res.json({ role: user.role });
     } else {
       console.log("User not found, defaulting to Client role.");
@@ -68,7 +83,6 @@ app.get("/api/userRole", async (req, res) => {
   }
 });
 
-// New endpoint to get user role from session
 app.get("/get-session-role", (req, res) => {
   if (req.session.role) {
     res.send({ role: req.session.role });
@@ -76,6 +90,7 @@ app.get("/get-session-role", (req, res) => {
     res.status(401).send("Not logged in");
   }
 });
+
 // Connect to database and start server
 connectDB()
   .then(() => {
@@ -84,15 +99,3 @@ connectDB()
     );
   })
   .catch((error) => console.error("Error connecting to MongoDB:", error));
-
-// Auth0 configuration backend side
-// app.use(
-//   auth({
-//     authRequired: false,
-//     auth0Logout: true,
-//     issuerBaseURL: 'jaysite.us.auth0.com', // Replace with your Auth0 Domain
-//     baseURL: 'http://localhost:4000', // Replace with your server base URL
-//     clientID: 'AVLmhHYAlnrpwCaYWfvOc3anmbT66hF2', // Replace with your Client ID
-//     secret: '7n7jhX6W5--Sb-HsD_KECb4hpr6jxLTLv9_XZTQkkmG8E10gVU2WnYZAL2bsX3LO', // Replace with your Client Secret
-//   })
-// );
