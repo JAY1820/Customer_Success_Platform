@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import "../App.css"; 
 
 const Sidebar = () => {
   const location = useLocation();

@@ -1,0 +1,21 @@
+/* Sidebar styles */
+.sidebar {
+    transition: all 0.3s ease;
+  }
+  
+  /* For tablets or small desktops */
+  @media (max-width: 992px) {
+    .sidebar {
+      max-width: 100%;
+      min-width: 100%;
+    }
+  }
+  
+  /* For mobile phones */
+  @media (max-width: 768px) {
+    .sidebar {
+      max-width: 100%;
+      min-width: 100%;
+    }
+  }
+  
