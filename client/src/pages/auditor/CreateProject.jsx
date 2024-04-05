@@ -3,16 +3,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Modal from "react-modal";
-import {
-  Box,
-  Flex,
-  TabList,
-  Tab,
-  TabPanel,
-  TabPanels,
-} from "monday-ui-react-core";
 import "monday-ui-react-core/tokens";
 
+// Create a new component called CreateProject
 const CreateProject = ({ fetch, setFetch, isOpen }) => {
   const [formData, setFormData] = useState({
     project_name: "",
@@ -22,7 +15,7 @@ const CreateProject = ({ fetch, setFetch, isOpen }) => {
     client_name: "",
     client_email: "",
     project_manager: "",
-    project_manager_email: "", // New field for project manager's email
+    project_manager_email: "", 
   });
 
   const [projectManagers, setProjectManagers] = useState([]);
@@ -30,6 +23,7 @@ const CreateProject = ({ fetch, setFetch, isOpen }) => {
   const [projectManagersemail, setProjectManagersemail] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
+  // Fetching users from the database
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -59,6 +53,7 @@ const CreateProject = ({ fetch, setFetch, isOpen }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -88,6 +83,7 @@ const CreateProject = ({ fetch, setFetch, isOpen }) => {
     }
   };
 
+  // Return the JSX of the component
   return (
     <>
       <div className="max-w mt-8">

@@ -1,11 +1,9 @@
 const express = require("express");
-const { protectUser } = require("../middlewares/userProtect");
-const projectController = require("../controllers/projectController");
-const clientFeedbackController = require("../controllers/clientFeedbackController");
-const downloadAsPdf = require("../controllers/downloadAsPdf");
+const projectController = require("../controllers/ProjectController");
+const clientFeedbackController = require("../controllers/ClientFeedbackController");
+const downloadAsPdf = require("../controllers/DownloadAsPdf");
 
 const router = express.Router();
-
 
 // Project Routes
 const { displayProjects, fetchOneProject } = projectController; // Changed to lowercase
@@ -13,14 +11,9 @@ const { displayProjects, fetchOneProject } = projectController; // Changed to lo
 router.get("/display-projects", displayProjects);
 router.get("/fetch-project/:id", fetchOneProject);
 
-
-
 // ALL FUNCTIONS
-const {
-    createClientFeedback,
-    deleteClientFeedback,
-    editClientFeedback,
-} = clientFeedbackController;
+const { createClientFeedback, deleteClientFeedback, editClientFeedback } =
+  clientFeedbackController;
 
 // CLIENT FEEDBACK ROUTES
 router.post("/:project_id", createClientFeedback);
@@ -31,10 +24,8 @@ router.delete("/:project_id/:clientFeedback_id", deleteClientFeedback);
 //EDIT CLIENT FEEDBACK
 router.put("/:clientFeedback_id", editClientFeedback);
 
-
 // DOWNLOAD AS PDF
 
 router.get("/download-pdf/:project_id", downloadAsPdf.downloadAllContent);
-
 
 module.exports = router;

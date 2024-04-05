@@ -1,6 +1,5 @@
-const Project = require("../models/projectModel");
+const Project = require("../models/ProjectModel");
 const Milestone = require("../models/MlieStoneModel");
-
 
 // CREATE MILESTONE
 const createMilestone = async (req, res, next) => {
@@ -18,9 +17,7 @@ const createMilestone = async (req, res, next) => {
 
     const projectDoc = await Project.findOne({ _id: project_id });
     if (!projectDoc) {
-      return res
-        .status(404)
-        .json({ message: "Project not found for this milestone" });
+      return res.status(404).json({ message: "Project not found for this milestone" });
     }
 
     const milestoneDoc = await Milestone.create({
@@ -33,14 +30,13 @@ const createMilestone = async (req, res, next) => {
       comments,
     });
 
-    // ADD MILESTONE ID TO PROJECT TABLE
-    projectDoc?.project_milestone.push(milestoneDoc._id);
+    projectDoc.project_milestone.push(milestoneDoc._id);
     await projectDoc.save();
 
-    return res.status(200).json({ message: "Milestone created" });
+    return res.status(201).json({ message: "Milestone created", milestone: milestoneDoc });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 
@@ -48,14 +44,12 @@ const createMilestone = async (req, res, next) => {
 const deleteMilestone = async (req, res, next) => {
   try {
     const { project_id, milestone_id } = req.params;
-    
     const projectDoc = await Project.findById(project_id);
 
     if (!projectDoc) {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    // Check if the milestone exists in the project
     const milestoneIndex = projectDoc.project_milestone.findIndex(
       milestone => milestone.toString() === milestone_id
     );
@@ -64,22 +58,17 @@ const deleteMilestone = async (req, res, next) => {
       return res.status(404).json({ message: "Milestone not found in project" });
     }
 
-    // Remove the milestone with the specified milestone_id
     projectDoc.project_milestone.splice(milestoneIndex, 1);
-
-    // Save the updated project document
     await projectDoc.save();
 
-    // Delete the milestone document
-    await Milestone.deleteOne({ _id: milestone_id });
+    await Milestone.findByIdAndDelete(milestone_id);
 
     return res.status(200).json({ message: "Milestone deleted successfully" });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Internal server error" });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
-
 
 // EDIT MILESTONE
 const editMilestone = async (req, res, next) => {
@@ -94,28 +83,30 @@ const editMilestone = async (req, res, next) => {
       comments,
     } = req.body;
     const { milestone_id } = req.params;
-    const milestoneDoc = await Milestone.findOne({ _id: milestone_id });
+
+    const milestoneDoc = await Milestone.findByIdAndUpdate(
+      milestone_id,
+      {
+        title,
+        startDate,
+        completionDate,
+        approvalDate,
+        status,
+        revisedCompletionDate,
+        comments,
+      },
+      { new: true }
+    );
 
     if (!milestoneDoc) {
-      return res.status(409).json({ message: "Milestone does not exist" });
+      return res.status(404).json({ message: "Milestone not found" });
     }
 
-    await milestoneDoc.set({
-      title,
-      startDate,
-      completionDate,
-      approvalDate,
-      status,
-      revisedCompletionDate,
-      comments,
-    });
-
-    await milestoneDoc.save();
-    return res.status(200).json({ message: "Milestone edited successfully" });
+    return res.status(200).json({ message: "Milestone edited successfully", milestone: milestoneDoc });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 
-module.exports = { createMilestone, deleteMilestone, editMilestone }; // Fixed export statement
+module.exports = { createMilestone, deleteMilestone, editMilestone };

@@ -64,7 +64,6 @@ const Budget = ({ project, setFetch, updateProjectData }) => {
         });
         closeModal();
         updateProjectData();
-        // ...other code...
       }
     } catch (err) {
       if (err.response.status === 409) {

@@ -10,7 +10,6 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AuditorDashboard from "./pages/auditor/AuditorDashboard";
 import ClientDashboard from "./pages/client/ClientDashboard";
 import PmDashboard from "./pages/project_manager/Pmdashboard";
-import Projectdetilas from './pages/auditor/ProjectDetails';
 import "./App.css";
 
 axios.defaults.baseURL = 'http://localhost:4004';

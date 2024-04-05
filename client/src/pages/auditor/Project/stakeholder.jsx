@@ -15,7 +15,7 @@ const Stakeholder = ({ project, setFetch }) => {
     client_email: "",
     project_status: "",
     project_manager_email: "",
-    auditor_email: "", // Added auditor_email field
+    auditor_email: "", 
   });
 
   const [projectManagers, setProjectManagers] = useState([]);
@@ -52,7 +52,7 @@ const Stakeholder = ({ project, setFetch }) => {
 
         setProjectManagers(managers);
         setClientEmails(clients);
-        setAuditorEmails(auditors); // Set auditor emails
+        setAuditorEmails(auditors); 
       } catch (error) {
         console.error(error);
       }

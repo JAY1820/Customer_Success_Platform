@@ -19,12 +19,12 @@ import RiskProfile from "./Project/Risk";
 import Sprint from "./Project/Sprint";
 import Milestone from "./Project/Milestones";
 import Resource from "./Project/Resource";
-import ProjectUpdate from "./Project/projectUpdate";
+import ProjectUpdate from "./Project/ProjectUpdate";
 import Stakeholder from "./Project/DisplayStackholder";
 import AuditHistory from "./Project/DisplayAudithistory";
 import TeamPhase from "./Project/Team";
 import MomsClient from "./Project/MomsClient";
-import ClientFeedback from "./Project/clientfeeback";
+import ClientFeedback from "./Project/ClientFeeback";
 
 function ProjectDetails({ onClose, project, updateProjectData }) {
   const [fetch, setFetch] = useState(false);

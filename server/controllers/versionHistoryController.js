@@ -1,5 +1,5 @@
-const Project = require("../models/projectModel");
-const VersionHistory = require("../models/versionHistoryModel");
+const Project = require("../models/ProjectModel");
+const VersionHistory = require("../models/VersionHistoryModel");
 
 // CREATE VERSION HISTORY
 const createVersionHistory = async (req, res, next) => {
@@ -35,13 +35,13 @@ const createVersionHistory = async (req, res, next) => {
     });
 
     // ADD VERSION HISTORY ID TO PROJECT TABLE
-    projectDoc?.project_version_history?.push(versionHistoryDoc._id);
+    projectDoc.project_version_history.push(versionHistoryDoc._id);
     await projectDoc.save();
 
-    return res.status(200).json({ message: "Version History created" });
+    return res.status(201).json({ message: "Version History created" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
 
@@ -49,28 +49,25 @@ const createVersionHistory = async (req, res, next) => {
 const deleteVersionHistory = async (req, res, next) => {
   try {
     const { project_id, versionHistory_id } = req.params;
-    const projectDoc = await Project.findById({ _id: project_id });
+    const projectDoc = await Project.findById(project_id);
 
     if (!projectDoc) {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    //Remove from project table
-    projectDoc.project_version_history =
-      projectDoc.project_version_history.filter(
-        (version) => version.toString() !== versionHistory_id
-      );
+    // Remove from project table
+    projectDoc.project_version_history = projectDoc.project_version_history.filter(
+      (version) => version.toString() !== versionHistory_id
+    );
 
     // Save the updated project document
     await projectDoc.save();
     await VersionHistory.deleteOne({ _id: versionHistory_id });
 
-    return res
-      .status(200)
-      .json({ message: "VersionHistory deleted successfully" });
+    return res.status(200).json({ message: "VersionHistory deleted successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
 
@@ -88,17 +85,15 @@ const editVersionHistory = async (req, res, next) => {
       approvedBy,
     } = req.body;
     const { versionHistory_id } = req.params;
-    const versionHistoryDoc = await VersionHistory.findOne({
-      _id: versionHistory_id,
-    });
+    const versionHistoryDoc = await VersionHistory.findById(versionHistory_id);
 
     if (!versionHistoryDoc) {
       return res
-        .status(409)
+        .status(404)
         .json({ message: "Version History does not exist" });
     }
 
-    await versionHistoryDoc.set({
+    versionHistoryDoc.set({
       no,
       type,
       change,
@@ -108,13 +103,12 @@ const editVersionHistory = async (req, res, next) => {
       approvalDate,
       approvedBy,
     });
-    versionHistoryDoc.save();
-    return res
-      .status(200)
-      .json({ message: "VersionHistory edited successfully" });
+    await versionHistoryDoc.save();
+
+    return res.status(200).json({ message: "VersionHistory edited successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
 

@@ -1,5 +1,5 @@
-const Budget = require("../models/budgetModel");
-const Project = require("../models/projectModel");
+const Budget = require("../models/BudgetModel");
+const Project = require("../models/ProjectModel");
 
 //CREATE BUDGET
 const createBudget = async (req, res, next) => {

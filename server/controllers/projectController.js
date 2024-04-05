@@ -1,11 +1,12 @@
 const nodemailer = require("nodemailer");
-const Project = require("../models/projectModel");
-const Budget = require("../models/budgetModel");
-const Momsclient = require("../models/momsclientmodel");
-const ProjectUpdates = require("../models/projectupdateModel");
-const Resource = require("../models/resourcemodel");
-const Team = require("../models/teamModel");
-const ClientFeedback = require("../models/clientFeedbackModel");
+const Project = require("../models/ProjectModel");
+const Budget = require("../models/BudgetModel");
+const Momsclient = require("../models/MomsclientModel");
+const ProjectUpdates = require("../models/ProjectupdateModel");
+const Resource = require("../models/ResourceModel");
+const Team = require("../models/TeamModel");
+const ClientFeedback = require("../models/ClientfeedbackModel");
+const { sendEmail } = require('../utils/EmailUtil');
 
 // CREATE PROJECT
 const createProject = async (req, res, next) => {
@@ -24,7 +25,7 @@ const createProject = async (req, res, next) => {
     const projectExists = await Project.findOne({ project_name });
 
     if (projectExists) {
-      return res.status(409).json({ message: "Project already exists" });
+      return res.status(409).json({ message: 'Project already exists' });
     }
 
     const projectDoc = await Project.create({
@@ -39,54 +40,29 @@ const createProject = async (req, res, next) => {
       project_status,
     });
 
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
+    // Send welcome email to the client
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: client_email,
-      subject: "Welcome to Our Project Management Platform",
-      html: `
-        <p>Dear ${client_name},</p>
-        <p>Thank you for choosing our platform! We're excited to have you on board for your project, "${project_name}".</p>
-        <p>Here are some important details:</p>
-        <ul>
-          <li>Project Name: ${project_name}</li>
-          <li>Scope: ${project_scope}</li>
-          <li>Project Manager: ${project_manager}</li>
-        </ul>
-        <p>You can access the platform and download the report pdf on : <a href="http://localhost:3000">Project Management Platform</a></p>
-        <p>If you have any questions or need assistance, feel free to reach out to your project manager or our support team.</p>
-        <p>Thank you once again, and we look forward to a successful collaboration!</p>
-        <p>Best regards</p>
-      `,
+      subject: 'Welcome to Our Project Management Platform',
+      html: `<p>Your email content here</p>`,
     };
 
-    await transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Email sent: " + info.response);
-      }
-    });
+    await sendEmail(mailOptions);
 
-    return res.status(200).json({ message: "Project created" });
+    return res.status(201).json({ message: 'Project created' });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
+
 
 // DISPLAY ALL PROJECTS
 const displayProjects = async (req, res, next) => {
   try {
     const projects = await Project.find({})
-     .populate("project_momsclients")
+      .populate("project_momsclients")
       .populate("project_resources")
       .populate("project_projectUpdates")
       .populate("project_team")
@@ -102,25 +78,28 @@ const displayProjects = async (req, res, next) => {
       .populate("project_version_history")
       .populate("project_clientFeedback");
 
-    if (projects) {
-      return res.status(200).json(projects);
-    }
+    return res.status(200).json(projects);
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
 
 // DELETE PROJECT
 const deleteProject = async (req, res, next) => {
   const { id } = req.params;
-  const projectDoc = await Project.findById(id);
-  if (!projectDoc) {
-    return res.status(404).json({ message: "Project not found" });
-  }
+  try {
+    const projectDoc = await Project.findById(id);
+    if (!projectDoc) {
+      return res.status(404).json({ message: "Project not found" });
+    }
 
-  await Project.deleteOne({ _id: id });
-  return res.status(200).json({ message: "Project deleted successfully" });
+    await Project.deleteOne({ _id: id });
+    return res.status(200).json({ message: "Project deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
+  }
 };
 
 // EDIT PROJECT
@@ -139,12 +118,9 @@ const editProject = async (req, res, next) => {
       project_status,
     } = req.body;
 
-    console.log(req.body);  
-
     const projectDoc = await Project.findById(project_id);
-
     if (!projectDoc) {
-      return res.status(409).json({ message: "Project does not exist" });
+      return res.status(404).json({ message: "Project does not exist" });
     }
 
     projectDoc.project_name = project_name;
@@ -162,17 +138,17 @@ const editProject = async (req, res, next) => {
 
     return res.status(200).json({ message: "Project edited successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
 
-// FETCH ONE PROJECT - THIS API FETCHES ALL DETAILS ABOUT PROJECT LIKE BUDGET, AUDIT HISTORY, AND MANY MORE
+// FETCH ONE PROJECT
 const fetchOneProject = async (req, res, next) => {
   const { id } = req.params;
   try {
     const projectDoc = await Project.findById(id)
-    .populate("project_momsclients")
+      .populate("project_momsclients")
       .populate("project_resources")
       .populate("project_projectUpdates")
       .populate("project_team")
@@ -189,16 +165,15 @@ const fetchOneProject = async (req, res, next) => {
       .populate("project_version_history");
 
     if (!projectDoc) {
-      return res.status(409).json({ message: "Project does not exist" });
+      return res.status(404).json({ message: "Project does not exist" });
     }
 
     return res.status(200).json(projectDoc);
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
-
 
 module.exports = {
   createProject,

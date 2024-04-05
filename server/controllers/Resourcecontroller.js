@@ -1,5 +1,5 @@
-const Project = require("../models/projectModel");
-const Resource = require("../models/resourcemodel");
+const Project = require("../models/ProjectModel");
+const Resource = require("../models/ResourceModel");
 
 // CREATE RESOURCE
 const createResource = async (req, res, next) => {
@@ -9,9 +9,7 @@ const createResource = async (req, res, next) => {
 
     const projectDoc = await Project.findOne({ _id: project_id });
     if (!projectDoc) {
-      return res
-        .status(404)
-        .json({ message: "Project not found for this phase" });
+      return res.status(404).json({ message: "Project not found for this phase" });
     }
 
     const resourceDoc = await Resource.create({
@@ -28,8 +26,8 @@ const createResource = async (req, res, next) => {
 
     return res.status(200).json({ message: "Resource created" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 
@@ -54,8 +52,8 @@ const deleteResource = async (req, res, next) => {
 
     return res.status(200).json({ message: "Resource deleted successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 
@@ -81,8 +79,8 @@ const editResource = async (req, res, next) => {
     await resourceDoc.save();
     return res.status(200).json({ message: "Resource edited successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 

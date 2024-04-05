@@ -18,7 +18,7 @@ import Stakeholder from "../project_manager/Project/DisplayStackholder";
 import AuditHistory from "../project_manager/Project/DisplayAudithistory";
 import VersionHistory from "./DisplayVersionHistory";
 import ProjectUpdate from "./DisplayProjectUpdates";
-import ClientFeedback from "./clientfeeback";
+import ClientFeedback from "./ClientFeedback";
 import MomsClient from "./MomsClient";
 
 function ProjectDetails({ onClose, project, updateProjectData }) {

@@ -88,7 +88,7 @@ function EditProject({ project, setFetch }) {
 
   const headerStyle = {
     fontSize: "1.5rem",
-    fontWeight: "bold", // Make the header text bold
+    fontWeight: "bold", 
     marginBottom: "1rem",
   };
 

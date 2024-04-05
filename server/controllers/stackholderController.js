@@ -1,5 +1,5 @@
-const Project = require("../models/projectModel");
-const StackHolder = require("../models/stackHolderModel");
+const Project = require("../models/ProjectModel");
+const StackHolder = require("../models/StackHolderModel");
 
 // CREATE STACKHOLDER
 const createStackholder = async (req, res, next) => {
@@ -9,9 +9,7 @@ const createStackholder = async (req, res, next) => {
 
     const projectDoc = await Project.findOne({ _id: project_id });
     if (!projectDoc) {
-      return res
-        .status(404)
-        .json({ message: "Project not found for this phase" });
+      return res.status(404).json({ message: "Project not found for this phase" });
     }
 
     const stackholderDoc = await StackHolder.create({
@@ -26,8 +24,8 @@ const createStackholder = async (req, res, next) => {
 
     return res.status(200).json({ message: "StackHolder created" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 
@@ -39,8 +37,8 @@ const displayStackholder = async (req, res, next) => {
       return res.status(200).json(stackholders);
     }
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occured ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 
@@ -63,12 +61,10 @@ const deleteStackholder = async (req, res, next) => {
     await projectDoc.save();
     await StackHolder.deleteOne({ _id: stackholder_id });
 
-    return res
-      .status(200)
-      .json({ message: "Stackholder deleted successfully" });
+    return res.status(200).json({ message: "Stackholder deleted successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 
@@ -92,8 +88,8 @@ const editStackholder = async (req, res, next) => {
     await stackholderDoc.save();
     return res.status(200).json({ message: "Stackholder edited successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 

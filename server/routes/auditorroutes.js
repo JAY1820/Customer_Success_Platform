@@ -1,11 +1,10 @@
 const express = require("express");
-const { protectUser } = require("../middlewares/userProtect");
-const auditorController = require("../controllers/projectController");
-const budgetController = require("../controllers/budgetController");
-const stackholderController = require("../controllers/stackholderController");
-const auditHistoryController = require("../controllers/auditHistoryController");
-const matrixController = require("../controllers/matrixController");
-const versionHistoryController = require("../controllers/versionHistoryController");
+const auditorController = require("../controllers/ProjectController");
+const budgetController = require("../controllers/BudgetController");
+const stackholderController = require("../controllers/StackholderController");
+const auditHistoryController = require("../controllers/AuditHistoryController");
+const matrixController = require("../controllers/MatrixController");
+const versionHistoryController = require("../controllers/VersionHistoryController");
 
 const router = express.Router();
 
@@ -52,7 +51,6 @@ const {
   createAuditHistory,
   deleteAuditHistory,
   editAuditHistory,
-  displayAuditHistory,
 } = auditHistoryController;
 
 router.post("/create-auditHistory/:project_id", createAuditHistory);
@@ -60,12 +58,7 @@ router.delete(
   "/delete-auditHistory/:project_id/:auditHistory_id",
   deleteAuditHistory
 );
-router.put(
-  "/edit-auditHistory/:project_id/:auditHistory_id",
-  editAuditHistory
-);
-
-
+router.put("/edit-auditHistory/:project_id/:auditHistory_id", editAuditHistory);
 
 // Routes for Matrix
 const {
@@ -97,18 +90,16 @@ router.delete(
   deleteTechnicalMatrix
 );
 
-router.put("/edit-operationalMatrix/:operationalMatrix_id", editOperationalMatrix);
+router.put(
+  "/edit-operationalMatrix/:operationalMatrix_id",
+  editOperationalMatrix
+);
 router.put("/edit-financialMatrix/:financialMatrix_id", editFinancialMatrix);
 router.put("/edit-technicalMatrix/:technicalMatrix_id", editTechnicalMatrix);
 
-
-
 // Routes for Version History
-const {
-  createVersionHistory,
-  deleteVersionHistory,
-  editVersionHistory,
-} = versionHistoryController;
+const { createVersionHistory, deleteVersionHistory, editVersionHistory } =
+  versionHistoryController;
 
 router.post("/create-versionHistory/:project_id", createVersionHistory);
 router.delete(
@@ -120,8 +111,5 @@ router.put(
   editVersionHistory
 );
 
-
-
-
-// r
+// Exporting the router
 module.exports = router;

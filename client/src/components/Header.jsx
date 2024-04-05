@@ -1,7 +1,6 @@
   import React, { useEffect } from "react";
   import { useAuth0 } from "@auth0/auth0-react";
   import axios from "axios";
-  import logo from "../assets/logo.jpg";
   import { useNavigate } from "react-router-dom";
 
   const Header = () => {
@@ -48,7 +47,7 @@
       <header className="flex justify-between items-center h-20 bg-gray-100 p-4">
         <nav className="border border-gray-300 flex justify-between gap-5 text-lg p-2 m-2 w-10/12 h-full">
           <div className="flex justify-between gap-2 text-black font-semibold whitespace-nowrap leading-7 mb-2">
-            <img className="w-12 h-9" src={logo} alt="logo" />
+            <img className="w-12 h-9" src="/logo.jpg" alt="logo" />
             <div className="font-inter self-start mt-3">Customer Support</div>
           </div>
           <div className="rounded border border-gray-400 flex gap-4 text-gray-600 font-semibold leading-9 p-1 w-1/2">

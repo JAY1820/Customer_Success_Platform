@@ -1,5 +1,5 @@
-const Project = require("../models/projectModel");
-const Team = require("../models/teamModel");
+const Project = require("../models/ProjectModel");
+const Team = require("../models/TeamModel");
 
 // CREATE TEAM
 const createTeam = async (req, res) => {
@@ -15,9 +15,7 @@ const createTeam = async (req, res) => {
 
     const projectDoc = await Project.findOne({ _id: project_id });
     if (!projectDoc) {
-      return res
-        .status(404)
-        .json({ message: "Project not found for this team" });
+      return res.status(404).json({ message: "Project not found for this team" });
     }
 
     const teamDoc = await Team.create({
@@ -34,8 +32,8 @@ const createTeam = async (req, res) => {
 
     return res.status(200).json({ message: "Team created" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 
@@ -60,8 +58,8 @@ const deleteTeam = async (req, res) => {
 
     return res.status(200).json({ message: "Team deleted successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 
@@ -93,8 +91,8 @@ const editTeam = async (req, res) => {
     await teamDoc.save();
     return res.status(200).json({ message: "Team edited successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 

@@ -1,7 +1,7 @@
-const Project = require("../models/projectModel");
-const OperationalMatrix = require("../models/operationalMatrixModel");
-const FinancialMatrix = require("../models/financialMatrixModel");
-const TechnicalMatrix = require("../models/technicalMatrixModel");
+const Project = require("../models/ProjectModel");
+const OperationalMatrix = require("../models/OperationalMatrixModel");
+const FinancialMatrix = require("../models/FinancialMatrixModel");
+const TechnicalMatrix = require("../models/TechnicalMatrixModel");
 
 // CREATE Operational Matrix
 const createOperationalMatrix = async (req, res, next) => {
@@ -11,259 +11,203 @@ const createOperationalMatrix = async (req, res, next) => {
 
     const projectDoc = await Project.findOne({ _id: project_id });
     if (!projectDoc) {
-      return res
-        .status(404)
-        .json({ message: "Project not found for this phase" });
+      return res.status(404).json({ message: "Project not found for this phase" });
     }
 
-    const operationalMatrixDoc = await OperationalMatrix.create({
-      level,
-      name,
-    });
+    const operationalMatrixDoc = await OperationalMatrix.create({ level, name });
 
     // ADD OperationalMatrix ID TO PROJECT TABLE
-    projectDoc?.project_operational_matrix?.push(operationalMatrixDoc._id);
+    projectDoc.project_operational_matrix.push(operationalMatrixDoc._id);
     await projectDoc.save();
 
-    return res.status(200).json({ message: "OperationalMatrix created" });
+    return res.status(201).json({ message: "OperationalMatrix created" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
 
-// DELETE STACKHOLDER
+// DELETE Operational Matrix
 const deleteOperationalMatrix = async (req, res, next) => {
   try {
     const { project_id, operationalMatrix_id } = req.params;
-    const projectDoc = await Project.findById({ _id: project_id });
+    const projectDoc = await Project.findById(project_id);
 
     if (!projectDoc) {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    // Remove the OperationalMatrix with the specified operationalMatrix_id
-    projectDoc.project_operational_matrix =
-      projectDoc.project_operational_matrix.filter(
-        (operationalMatrix) =>
-          operationalMatrix.toString() !== operationalMatrix_id
-      );
+    projectDoc.project_operational_matrix = projectDoc.project_operational_matrix.filter(
+      matrixId => matrixId.toString() !== operationalMatrix_id
+    );
 
-    // Save the updated project document
     await projectDoc.save();
-    await OperationalMatrix.deleteOne({ _id: operationalMatrix_id });
+    await OperationalMatrix.findByIdAndDelete(operationalMatrix_id);
 
-    return res
-      .status(200)
-      .json({ message: "Stackholder deleted successfully" });
+    return res.status(200).json({ message: "Operational Matrix deleted successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
 
-// EDIT STACKHOLDER
+// EDIT Operational Matrix
 const editOperationalMatrix = async (req, res, next) => {
   try {
     const { level, name } = req.body;
     const { operationalMatrix_id } = req.params;
-    const operationalMatrixDoc = await OperationalMatrix.findOne({
-      _id: operationalMatrix_id,
-    });
+    const operationalMatrixDoc = await OperationalMatrix.findByIdAndUpdate(
+      operationalMatrix_id,
+      { level, name },
+      { new: true }
+    );
 
     if (!operationalMatrixDoc) {
-      return res
-        .status(409)
-        .json({ message: "Operational Matrix does not exist" });
+      return res.status(404).json({ message: "Operational Matrix not found" });
     }
 
-    await operationalMatrixDoc.set({
-      level,
-      name,
-    });
-
-    await operationalMatrixDoc.save();
-    return res
-      .status(200)
-      .json({ message: "Operational Matrix edited successfully" });
+    return res.status(200).json({ message: "Operational Matrix edited successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
-// CREATE FinancialMatrix
+
+// CREATE Financial Matrix
 const createFinancialMatrix = async (req, res, next) => {
   try {
     const { project_id } = req.params;
     const { level, name } = req.body;
 
-    const projectDoc = await Project.findOne({ _id: project_id });
+    const projectDoc = await Project.findById(project_id);
     if (!projectDoc) {
-      return res
-        .status(404)
-        .json({ message: "Project not found for this phase" });
+      return res.status(404).json({ message: "Project not found for this phase" });
     }
 
-    const financialMatrixDoc = await FinancialMatrix.create({
-      level,
-      name,
-    });
+    const financialMatrixDoc = await FinancialMatrix.create({ level, name });
 
-    // ADD FinancialMatrix ID TO PROJECT TABLE
-    projectDoc?.project_financial_matrix?.push(financialMatrixDoc._id);
+    projectDoc.project_financial_matrix.push(financialMatrixDoc._id);
     await projectDoc.save();
 
-    return res.status(200).json({ message: "FinancialMatrix created" });
+    return res.status(201).json({ message: "Financial Matrix created" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
 
-// DELETE STACKHOLDER
+// DELETE Financial Matrix
 const deleteFinancialMatrix = async (req, res, next) => {
   try {
     const { project_id, financialMatrix_id } = req.params;
-    const projectDoc = await Project.findById({ _id: project_id });
+    const projectDoc = await Project.findById(project_id);
 
     if (!projectDoc) {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    // Remove the FinancialMatrix with the specified financialMatrix_id
-    projectDoc.project_financial_matrix =
-      projectDoc.project_financial_matrix.filter(
-        (financialMatrix) => financialMatrix.toString() !== financialMatrix_id
-      );
+    projectDoc.project_financial_matrix = projectDoc.project_financial_matrix.filter(
+      matrixId => matrixId.toString() !== financialMatrix_id
+    );
 
-    // Save the updated project document
     await projectDoc.save();
-    await FinancialMatrix.deleteOne({ _id: financialMatrix_id });
+    await FinancialMatrix.findByIdAndDelete(financialMatrix_id);
 
-    return res
-      .status(200)
-      .json({ message: "Financial Matrix deleted successfully" });
+    return res.status(200).json({ message: "Financial Matrix deleted successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
 
-// EDIT STACKHOLDER
+// EDIT Financial Matrix
 const editFinancialMatrix = async (req, res, next) => {
   try {
     const { level, name } = req.body;
     const { financialMatrix_id } = req.params;
-    const financialMatrixDoc = await FinancialMatrix.findOne({
-      _id: financialMatrix_id,
-    });
+    const financialMatrixDoc = await FinancialMatrix.findByIdAndUpdate(
+      financialMatrix_id,
+      { level, name },
+      { new: true }
+    );
 
     if (!financialMatrixDoc) {
-      return res
-        .status(409)
-        .json({ message: "Financial Matrix does not exist" });
+      return res.status(404).json({ message: "Financial Matrix not found" });
     }
 
-    await financialMatrixDoc.set({
-      level,
-      name,
-    });
-
-    await financialMatrixDoc.save();
-    return res
-      .status(200)
-      .json({ message: "Financial Matrix edited successfully" });
+    return res.status(200).json({ message: "Financial Matrix edited successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
 
-// CREATE TechnicalMatrix
+// CREATE Technical Matrix
 const createTechnicalMatrix = async (req, res, next) => {
   try {
     const { project_id } = req.params;
     const { level, name } = req.body;
 
-    const projectDoc = await Project.findOne({ _id: project_id });
+    const projectDoc = await Project.findById(project_id);
     if (!projectDoc) {
-      return res
-        .status(404)
-        .json({ message: "Project not found for this phase" });
+      return res.status(404).json({ message: "Project not found for this phase" });
     }
 
-    const technicalMatrixDoc = await TechnicalMatrix.create({
-      level,
-      name,
-    });
+    const technicalMatrixDoc = await TechnicalMatrix.create({ level, name });
 
-    // ADD TechnicalMatrix ID TO PROJECT TABLE
-    projectDoc?.project_technical_matrix?.push(technicalMatrixDoc._id);
+    projectDoc.project_technical_matrix.push(technicalMatrixDoc._id);
     await projectDoc.save();
 
-    return res.status(200).json({ message: "TechnicalMatrix created" });
+    return res.status(201).json({ message: "Technical Matrix created" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
 
-// DELETE STACKHOLDER
+// DELETE Technical Matrix
 const deleteTechnicalMatrix = async (req, res, next) => {
   try {
     const { project_id, technicalMatrix_id } = req.params;
-    const projectDoc = await Project.findById({ _id: project_id });
+    const projectDoc = await Project.findById(project_id);
 
     if (!projectDoc) {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    // Remove the TechnicalMatrix with the specified technicalMatrix_id
-    projectDoc.project_technical_matrix =
-      projectDoc.project_technical_matrix.filter(
-        (technicalMatrix) => technicalMatrix.toString() !== technicalMatrix_id
-      );
+    projectDoc.project_technical_matrix = projectDoc.project_technical_matrix.filter(
+      matrixId => matrixId.toString() !== technicalMatrix_id
+    );
 
-    // Save the updated project document
     await projectDoc.save();
-    await TechnicalMatrix.deleteOne({ _id: technicalMatrix_id });
+    await TechnicalMatrix.findByIdAndDelete(technicalMatrix_id);
 
-    return res
-      .status(200)
-      .json({ message: "Technical Matrix deleted successfully" });
+    return res.status(200).json({ message: "Technical Matrix deleted successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
 
-// EDIT STACKHOLDER
+// EDIT Technical Matrix
 const editTechnicalMatrix = async (req, res, next) => {
   try {
     const { level, name } = req.body;
     const { technicalMatrix_id } = req.params;
-    const technicalMatrixDoc = await TechnicalMatrix.findOne({
-      _id: technicalMatrix_id,
-    });
+    const technicalMatrixDoc = await TechnicalMatrix.findByIdAndUpdate(
+      technicalMatrix_id,
+      { level, name },
+      { new: true }
+    );
 
     if (!technicalMatrixDoc) {
-      return res
-        .status(409)
-        .json({ message: "Technical Matrix does not exist" });
+      return res.status(404).json({ message: "Technical Matrix not found" });
     }
 
-    await technicalMatrixDoc.set({
-      level,
-      name,
-    });
-
-    await technicalMatrixDoc.save();
-    return res
-      .status(200)
-      .json({ message: "Technical Matrix edited successfully" });
+    return res.status(200).json({ message: "Technical Matrix edited successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(500).json({ message: `Error occurred ${error.message}` });
   }
 };
 

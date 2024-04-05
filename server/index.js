@@ -10,13 +10,13 @@ const { auth } = require("express-openid-connect");
 const session = require("express-session");
 
 // Import routes
-const adminRoutes = require("./routes/adminroutes");
-const pmRoutes = require("./routes/pmroutes");
-const clientRoutes = require("./routes/clientroutes");
-const auditorRoutes = require("./routes/auditorroutes");
+const adminRoutes = require("./routes/AdminRoutes");
+const pmRoutes = require("./routes/PmRoutes");
+const clientRoutes = require("./routes/ClientRoutes");
+const auditorRoutes = require("./routes/AuditorRoutes");
 
 // Import models
-const User = require("./models/usermodel");
+const User = require("./models/UserModel");
 
 // Load environment variables
 dotenv.config();
@@ -46,12 +46,16 @@ app.use("/auditor", auditorRoutes);
 
 // Define API endpoints
 app.get("/api/user", async (req, res) => {
-  const user = await User.findById(req.oidc.user.sub);
-  if (req.session.userId) {
-    const user = await User.findById(req.session.userId);
-    res.status(200).json({ userId: req.session.userId, name: user.name });
-  } else {
-    res.status(401).json({ message: "Not authenticated" });
+  try {
+    const user = await User.findById(req.oidc.user.sub);
+    if (user) {
+      res.status(200).json({ userId: req.oidc.user.sub, name: user.name });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
@@ -63,6 +67,7 @@ app.get("/api/userRole", async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user) {
+      // Role of the user print in a console for debugging
       console.log("User role:", user.role);
       res.json({ role: user.role });
     } else {
@@ -83,12 +88,16 @@ app.get("/get-session-role", (req, res) => {
     res.status(401).send("Not logged in");
   }
 });
+
 // Connect to database and start server
 connectDB()
   .then(() => {
     app.listen(PORT, () =>
+    // for debugging purposes
       console.log(`Server started on http://localhost:${PORT}`)
     );
   })
-  .catch((error) => console.error("Error connecting to MongoDB:", error));
-
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+    process.exit(1); // Exit the process with an error status code
+  });

@@ -1,5 +1,5 @@
-const Project = require("../models/projectModel");
-const Mom = require("../models/momsclientmodel");
+const Project = require("../models/ProjectModel");
+const Mom = require("../models/MomsclientModel");
 
 // CREATE MOM
 const createMom = async (req, res, next) => {
@@ -9,78 +9,65 @@ const createMom = async (req, res, next) => {
 
     const projectDoc = await Project.findOne({ _id: project_id });
     if (!projectDoc) {
-      return res
-        .status(404)
-        .json({ message: "Project not found for this phase" });
+      return res.status(404).json({ message: "Project not found for this phase" });
     }
 
-    const MomsDoc = await Mom.create({
-      date,
-      duration,
-      link,
-      comments,
-    });
+    const momsDoc = await Mom.create({ date, duration, link, comments });
 
-    // ADD RESOURCE ID TO PROJECT TABLE
-    projectDoc?.project_momsclients?.push(MomsDoc._id);
+    projectDoc.project_momsclients.push(momsDoc._id);
     await projectDoc.save();
 
-    return res.status(200).json({ message: "Mom created" });
+    return res.status(201).json({ message: "Mom created" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 
-// DELETE RESOURCE
+// DELETE MOM
 const deleteMom = async (req, res, next) => {
   try {
     const { project_id, mom_id } = req.params;
-    const projectDoc = await Project.findById({ _id: project_id });
+    const projectDoc = await Project.findById(project_id);
 
     if (!projectDoc) {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    // Remove the mom with the specified mom_id
     projectDoc.project_momsclients = projectDoc.project_momsclients.filter(
-      (mom) => mom.toString() !== mom_id
+      mom => mom.toString() !== mom_id
     );
 
-    // Save the updated project document
     await projectDoc.save();
-    await Mom.deleteOne({ _id: mom_id });
+    await Mom.findByIdAndDelete(mom_id);
 
     return res.status(200).json({ message: "Mom deleted successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 
-// EDIT RESOURCE
+// EDIT MOM
 const editMom = async (req, res, next) => {
   try {
     const { date, duration, link, comments } = req.body;
     const { mom_id } = req.params;
-    const MomsDoc = await Mom.findOne({ _id: mom_id });
 
-    if (!MomsDoc) {
-      return res.status(409).json({ message: "Mom does not exist" });
+    const momsDoc = await Mom.findByIdAndUpdate(
+      mom_id,
+      { date, duration, link, comments },
+      { new: true }
+    );
+
+    if (!momsDoc) {
+      return res.status(404).json({ message: "Mom not found" });
     }
 
-    await MomsDoc.set({
-      date,
-      duration,
-      link,
-      comments,
-    });
-
-    await MomsDoc.save();
     return res.status(200).json({ message: "Mom edited successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 

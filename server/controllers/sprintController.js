@@ -1,7 +1,7 @@
-const Project = require("../models/projectModel");
-const Sprint = require("../models/sprintModel");
+const Project = require("../models/ProjectModel");
+const Sprint = require("../models/SprintModel");
 
-// CREATE RISK
+// CREATE SPRINT
 const createSprint = async (req, res, next) => {
   try {
     const { project_id } = req.params;
@@ -9,9 +9,7 @@ const createSprint = async (req, res, next) => {
 
     const projectDoc = await Project.findOne({ _id: project_id });
     if (!projectDoc) {
-      return res
-        .status(404)
-        .json({ message: "Project not found for this phase" });
+      return res.status(404).json({ message: "Project not found for this phase" });
     }
 
     const sprintDoc = await Sprint.create({
@@ -22,18 +20,18 @@ const createSprint = async (req, res, next) => {
       comments,
     });
 
-    // ADD PHASE ID TO PROJECT TABLE
+    // ADD SPRINT ID TO PROJECT TABLE
     projectDoc?.project_sprints?.push(sprintDoc._id);
     await projectDoc.save();
 
     return res.status(200).json({ message: "Sprint created" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 
-// DELETE RISK
+// DELETE SPRINT
 const deleteSprint = async (req, res, next) => {
   try {
     const { project_id, sprint_id } = req.params;
@@ -54,12 +52,12 @@ const deleteSprint = async (req, res, next) => {
 
     return res.status(200).json({ message: "Sprint deleted successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 
-// EDIT RISK
+// EDIT SPRINT
 const editSprint = async (req, res, next) => {
   try {
     const { sprint, startDate, endDate, status, comments } = req.body;
@@ -81,8 +79,8 @@ const editSprint = async (req, res, next) => {
     await sprintDoc.save();
     return res.status(200).json({ message: "Sprint edited successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 

@@ -1,5 +1,4 @@
-const User = require("../models/usermodel");
-const jwt = require("jsonwebtoken");
+const User = require("../models/UserModel");
 
 const protectUser = async (req, res, _next, expectedRole) => {
   try {

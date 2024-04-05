@@ -43,22 +43,6 @@ function DisplayProjects({ fetch, setFetch, onViewMore }) {
     return formattedDate;
   };
 
-  const download = async (project_id) => {
-    setLoading(true);
-    try {
-      const response = await axios.get(`/download-pdf/${project_id}`, {
-        responseType: "arraybuffer",
-      });
-
-      const pdfBlob = new Blob([response.data], { type: "application/pdf" });
-
-      saveAs(pdfBlob, "output.pdf");
-      setLoading(false);
-    } catch (error) {
-      console.error("Error converting to PDF:", error);
-      setLoading(false);
-    }
-  };
 
   const getStatusColor = (status) => {
     switch (status) {

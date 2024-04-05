@@ -1,8 +1,8 @@
-const User = require("../models/usermodel");
+const User = require("../models/UserModel");
 const bcrypt = require('bcrypt');
-const nodemailer = require('nodemailer');
+const { sendEmail } = require('../utils/EmailUtil');
 
-//  add user
+// Add user function
 const addUser = async (req, res) => {
   try {
     const { name, role, email, password } = req.body;
@@ -10,7 +10,7 @@ const addUser = async (req, res) => {
     const userExists = await User.findOne({ email });
 
     if (userExists) {
-      return res.status(409).json({ message: "User already exists" });
+      return res.status(409).json({ message: 'User already exists' });
     }
 
     // Hash the password before saving it to the database
@@ -20,41 +20,24 @@ const addUser = async (req, res) => {
       name,
       role,
       email,
-      password: hashedPassword, 
+      password: hashedPassword,
     });
 
     // Send welcome email
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER, 
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: email, 
+      to: email,
       subject: 'Welcome to Customer Support Platform',
-      html: `<p>Thank you for signing up on our platform!</p>
-            <p>website link : http://localhost:3000</p>
-            <p>Email ID: ${email}</p>
-            <p>Password: ${password}</p>
-            <p>Invitation Role: ${role}</p>`,
+      html: `Your email content here`,
     };
 
-    await transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log('Email sent: ' + info.response);
-      }
-    });
+    await sendEmail(mailOptions);
 
-    return res.status(200).json(userDoc);
+    // 201 for successful creation
+    return res.status(201).json(userDoc);
   } catch (error) {
     console.log(error);
-    return res.json({ message: "An error occurred. Please try again." });
+    return res.status(500).json({ message: 'An error occurred. Please try again.' });
   }
 };
 
@@ -62,12 +45,10 @@ const addUser = async (req, res) => {
 const getUsers = async (req, res) => {
   try {
     const users = await User.find({});
-    if (users) {
-      return res.status(200).json(users);
-    }
+    return res.status(200).json(users);
   } catch (error) {
     console.log(error);
-    return res.json({ message: "An error occurred. Please try again." });
+    return res.status(500).json({ message: "An error occurred. Please try again." });
   }
 };
 
@@ -76,35 +57,27 @@ const getUser = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
-    if (user) {
-      return res.status(200).json(user);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
+    return res.status(200).json(user);
   } catch (error) {
     console.log(error);
-    return res.json({ message: "An error occurred. Please try again." });
+    return res.status(500).json({ message: "An error occurred. Please try again." });
   }
 };
 
 // get user by role
-
 const getUserByRole = async (req, res) => {
   try {
     const { role } = req.params;
-    const user = await
-    User.find
-    ({ role: role });
-    if (user) {
-      return res.status(200).json(user);
-    }
-  }
-  catch (error) {
+    const users = await User.find({ role });
+    return res.status(200).json(users);
+  } catch (error) {
     console.log(error);
-    return res.json({ message: "An error occurred. Please try again." });
+    return res.status(500).json({ message: "An error occurred. Please try again." });
   }
-
 };
-
-
 
 /* EDIT USER */
 const editUser = async (req, res) => {
@@ -129,7 +102,7 @@ const editUser = async (req, res) => {
     return res.status(200).json(userDoc);
   } catch (error) {
     console.log(error);
-    return res.json({ message: "An error occurred. Please try again." });
+    return res.status(500).json({ message: "An error occurred. Please try again." });
   }
 };
 
@@ -147,7 +120,7 @@ const deleteUser = async (req, res) => {
     return res.status(200).json({ message: "User deleted" });
   } catch (error) {
     console.log(error);
-    return res.json({ message: "An error occurred. Please try again." });
+    return res.status(500).json({ message: "An error occurred. Please try again." });
   }
 };
 
@@ -163,7 +136,6 @@ const assignProject = async (req, res) => {
       return res.status(404).json({ message: "User does not exist" });
     }
 
-    // Update the projects array in the User document
     if (!userDoc.projects.includes(project_id)) {
       userDoc.projects.push(project_id);
       await userDoc.save();
@@ -188,7 +160,6 @@ const unassignProject = async (req, res) => {
       return res.status(404).json({ message: "User does not exist" });
     }
 
-    // Update the projects array in the User document
     userDoc.projects = userDoc.projects.filter(project => project.toString() !== project_id);
     await userDoc.save();
 

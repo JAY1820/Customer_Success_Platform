@@ -1,12 +1,12 @@
 const express = require("express");
-const RiskController = require("../controllers/riskController");
-const SprintController = require("../controllers/sprintController");
+const RiskController = require("../controllers/RiskController");
+const SprintController = require("../controllers/SprintController");
 const MileStoneController = require("../controllers/MileStoneController");
-const ProjectController = require("../controllers/projectController");
-const ResourceController = require("../controllers/Resourcecontroller");
-const momsclientController = require("../controllers/momsclientController");
-const projectupdateController = require("../controllers/projectupdateController");
-const teamController = require("../controllers/teamController");
+const ProjectController = require("../controllers/ProjectController");
+const ResourceController = require("../controllers/ResourceController");
+const momsclientController = require("../controllers/MomsclientController");
+const projectupdateController = require("../controllers/ProjectUpdateController");
+const teamController = require("../controllers/TeamController");
 
 const router = express.Router();
 
@@ -45,7 +45,6 @@ const { createRisk, editRisk, deleteRisk } = RiskController;
 router.post("/create-risk/:project_id", createRisk);
 router.delete("/delete-risk/:project_id/:risk_id", deleteRisk);
 router.put("/edit-risk/:risk_id", editRisk);
-
 
 // sprint routes
 const { createSprint, deleteSprint, editSprint } = SprintController;

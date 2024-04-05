@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
-import { FaDownload, FaTimes } from "react-icons/fa";
 import { RingLoader } from "react-spinners";
 import { saveAs } from "file-saver";
-
+import { FaDownload, FaTimes } from "react-icons/fa";
 import {
   TabsContext,
   TabList,
@@ -13,19 +11,17 @@ import {
   TabPanel,
 } from "monday-ui-react-core";
 
+// Import the necessary components from the project_manager and auditor folders
 import ProjectOverview from "../auditor/Project/ProjectOverview";
 import Budget from "../auditor/Project/Budget";
 import Stakeholder from "../auditor/Project/stakeholder";
-
 import Sprint from "../project_manager/Project/Sprint";
 import Milestone from "../project_manager/Project/Milestones";
 import Resource from "../project_manager/Project/Resource";
 import TeamPhase from "../project_manager/Project/Team";
-import ProjectUpdate from "../project_manager/Project/projectUpdate";
 import MomsClient from "../project_manager/Project/MomsClient";
-import ClientFeedback from "../project_manager/Project/clientfeeback";
+import ClientFeedback from "../project_manager/Project/ClientFeeback";
 import RiskProfile from "../project_manager/Project/Risk";
-
 import AuditHistory from "../auditor/Project/AuditHistory";
 import VersionHistory from "../auditor/Project/VersionHistory";
 import FinancialMatrix from "../auditor/Project/FinancialMatrix";
@@ -54,6 +50,7 @@ function EscalationMatix({ project, setFetch, updateProjectData }) {
   );
 }
 
+// Create a new component called ProjectDetails
 function ProjectDetails({ onClose, project, updateProjectData }) {
   const [fetch, setFetch] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -88,6 +85,7 @@ function ProjectDetails({ onClose, project, updateProjectData }) {
     return <RingLoader />;
   }
 
+  // Return the JSX for the ProjectDetails component
   return (
     <div className="w-full mt-2">
       <TabsContext>

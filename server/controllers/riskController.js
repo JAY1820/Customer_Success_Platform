@@ -1,5 +1,5 @@
-const Risk = require("../models/riskModel");
-const Project = require("../models/projectModel");
+const Project = require("../models/ProjectModel");
+const Risk = require("../models/RiskModel");
 
 // CREATE RISK
 const createRisk = async (req, res, next) => {
@@ -17,9 +17,7 @@ const createRisk = async (req, res, next) => {
 
     const projectDoc = await Project.findOne({ _id: project_id });
     if (!projectDoc) {
-      return res
-        .status(404)
-        .json({ message: "Project not found for this risk" });
+      return res.status(404).json({ message: "Project not found for this risk" });
     }
 
     const riskDoc = await Risk.create({
@@ -38,8 +36,8 @@ const createRisk = async (req, res, next) => {
 
     return res.status(200).json({ message: "Risk created" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 
@@ -64,8 +62,8 @@ const deleteRisk = async (req, res, next) => {
 
     return res.status(200).json({ message: "Risk deleted successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 
@@ -101,8 +99,8 @@ const editRisk = async (req, res, next) => {
     await riskDoc.save();
     return res.status(200).json({ message: "Risk edited successfully" });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: `Error occurred ${error}` });
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || "An error occurred. Please try again." });
   }
 };
 

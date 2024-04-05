@@ -1,6 +1,6 @@
 // Importing required modules
 const puppeteer = require("puppeteer");
-const Project = require("../models/projectModel");
+const Project = require("../models/ProjectModel");
 const { ProjectHtml } = require("./ProjectHtml");
 
 // Function to download all content
@@ -10,7 +10,7 @@ const downloadAllContent = async (req, res) => {
 
   try {
     // Fetch the project document from the database
-    const projectDoc = await Project.find({ _id: project_id })
+    const projectDoc = await Project.findById(project_id)
       .populate("project_risks")
       .populate("project_sprints")
       .populate("project_audit_history")
@@ -19,9 +19,9 @@ const downloadAllContent = async (req, res) => {
       .populate("project_technical_matrix")
       .populate("project_version_history");
 
-    // If the project does not exist, return an error response
+    // If the project does not exist, return a not found response
     if (!projectDoc) {
-      return res.status(409).json({ message: "Project does not exist" });
+      return res.status(404).json({ message: "Project not found" });
     }
 
     // Generate HTML content dynamically using ProjectHtml function
@@ -45,14 +45,15 @@ const downloadAllContent = async (req, res) => {
     res.set({
       "Content-Type": "application/pdf",
       "Content-Length": pdf.length,
+      "Content-Disposition": 'attachment; filename="project.pdf"', // Optional: Set filename for download
     });
 
     // Send the PDF as a response
-    res.send(pdf);
+    res.status(200).send(pdf);
   } catch (error) {
     // Log the error and send an error response if something goes wrong
     console.error("Error in downloadAllContent:", error);
-    res.status(500).json({ message: "Internal Server Error", error: error.message });
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
