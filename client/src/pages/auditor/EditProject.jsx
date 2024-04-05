@@ -229,9 +229,9 @@ function EditProject({ project, setFetch }) {
                 >
                   <option value="">Select</option>
                   <option value="In progress">In progress</option>
-                  <option value="Complete">Completed</option>
+                  <option value="Completed">Completed</option>
                   <option value="On Time">On Time</option>
-                  <option value="Delay">On hold</option>
+                  <option value="On hold">On hold</option>
                 </select>
               </div>
 

@@ -14,7 +14,8 @@
           if (isAuthenticated && !isLoading) {
             const response = await axios.get(`/api/userRole?email=${user.email}`);
             const userRole = response.data.role || "Client";
-            console.log(userRole);
+            // just to debugg
+            console.log(userRole,"just to debug");
 
             switch (userRole) {
               case "Admin":

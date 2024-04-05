@@ -34,7 +34,7 @@ const ProjectSchema = new mongoose.Schema(
 
     project_status: {
       type: String,
-      default: "IN PROGRESS",
+      default: "In progress",
     },
 
     // reference to the user who created the project
