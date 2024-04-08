@@ -49,7 +49,7 @@ function EditRisk({ risk, setFetch, updateProjectData }) {
   async function updateRisk(e) {
     e.preventDefault();
     try {
-      const response = await axios.put(`/projectmanager/edit-risk/${risk._id}`, formData);
+      const response = await axios.put(`/projectmanager/risk/${risk._id}`, formData);
       if (response.status === 200) {
         toast.success("Risk Edited successfully ");
         setFetch((prev) => !prev);

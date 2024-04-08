@@ -51,7 +51,7 @@ function EditVersionHistory({ versionHistory, setFetch, project, updateProjectDa
     e.preventDefault();
     try {
       const response = await axios.put(
-        `/auditor/edit-versionHistory/${project._id}/${versionHistory._id}`,
+        `/auditor/versionHistory/${project._id}/${versionHistory._id}`,
         formData
       );
       if (response.status === 200) {

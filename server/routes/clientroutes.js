@@ -6,7 +6,7 @@ const downloadAsPdf = require("../controllers/DownloadAsPdf");
 const router = express.Router();
 
 // Project Routes
-const { displayProjects, fetchOneProject } = projectController; // Changed to lowercase
+const { displayProjects, fetchOneProject } = projectController; 
 
 router.get("/display-projects", displayProjects);
 router.get("/fetch-project/:id", fetchOneProject);

@@ -39,7 +39,7 @@ const Team = ({ project, setFetch, updateProjectData }) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `/projectmanager/create-team/${project._id}`,
+        `/projectmanager/team/${project._id}`,
         formData
       );
       console.log("Response from server:", response); // Add this line for logging
@@ -70,7 +70,7 @@ const Team = ({ project, setFetch, updateProjectData }) => {
     if (confirmDelete) {
       try {
         const response = await axios.delete(
-          `/projectmanager/delete-team/${project._id}/${team_id}`
+          `/projectmanager/team/${project._id}/${team_id}`
         );
         toast.success(response.data.message);
         setFetch((prev) => !prev);

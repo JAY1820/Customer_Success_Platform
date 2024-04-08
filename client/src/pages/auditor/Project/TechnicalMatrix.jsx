@@ -51,7 +51,7 @@ const TechnicalMatrix = ({ project, setFetch, updateProjectData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`/auditor/create-technicalMatrix/${project._id}`, formData)
+      await axios.post(`/auditor/technicalMatrix/${project._id}`, formData)
         .then((res) => {
           if (res.status === 200) {
             setFetch((prev) => !prev);
@@ -77,7 +77,7 @@ const TechnicalMatrix = ({ project, setFetch, updateProjectData }) => {
     if (a) {
       try {
         const response = await axios.delete(
-          `/auditor/delete-technicalMatrix/${project._id}/${technicalMatrix_id}`
+          `/auditor/technicalMatrix/${project._id}/${technicalMatrix_id}`
         );
         toast.success(response.data.message);
         setFetch((prev) => !prev);

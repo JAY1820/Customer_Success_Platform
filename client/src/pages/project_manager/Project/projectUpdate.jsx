@@ -40,7 +40,7 @@ const ProjectUpdate = ({ project, setFetch, updateProjectData }) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `/projectmanager/create-update/${project._id}`,
+        `/projectmanager/update/${project._id}`,
         formData
       );
       if (response.status === 200) {
@@ -66,7 +66,7 @@ const ProjectUpdate = ({ project, setFetch, updateProjectData }) => {
     if (confirmDelete) {
       try {
         const response = await axios.delete(
-          `/projectmanager/delete-update/${project._id}/${projectUpdate_id}`
+          `/projectmanager/update/${project._id}/${projectUpdate_id}`
         );
         toast.success(response.data.message);
         setFetch((prev) => !prev);

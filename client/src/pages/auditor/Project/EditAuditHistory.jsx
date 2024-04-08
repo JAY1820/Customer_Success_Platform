@@ -47,7 +47,7 @@ function EditAuditHistory({ auditHistory, setFetch, project, updateProjectData }
   async function updateAuditHistory(e) {
     e.preventDefault();
     try {
-      const response = await axios.put(`/auditor/edit-auditHistory/${project._id}/${auditHistory._id}`, formData);
+      const response = await axios.put(`/auditor/auditHistory/${project._id}/${auditHistory._id}`, formData);
       if (response.status === 200) {
         toast.success("Audit history edited successfully");
         setFetch((prev) => !prev);

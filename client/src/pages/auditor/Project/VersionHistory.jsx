@@ -60,7 +60,7 @@ const VersionHistory = ({ project, setFetch, updateProjectData }) => {
     e.preventDefault();
     try {
       await axios
-        .post(`/auditor/create-versionHistory/${project._id}`, formData)
+        .post(`/auditor/versionHistory/${project._id}`, formData)
         .then((res) => {
           if (res.status === 200) {
             toast.success("Version History Created successfully ");
@@ -93,7 +93,7 @@ const VersionHistory = ({ project, setFetch, updateProjectData }) => {
     if (a) {
       try {
         const response = await axios.delete(
-          `/auditor/delete-versionHistory/${project._id}/${versionHistory_id}`
+          `/auditor/versionHistory/${project._id}/${versionHistory_id}`
         );
         toast.success(response.data.message);
         setFetch((prev) => !prev);

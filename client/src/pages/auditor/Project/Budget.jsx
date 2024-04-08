@@ -51,7 +51,7 @@ const Budget = ({ project, setFetch, updateProjectData }) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `/auditor/create-budget/${project._id}`,
+        `/auditor/budget/${project._id}`,
         formData
       );
       if (response.status === 200) {
@@ -78,7 +78,7 @@ const Budget = ({ project, setFetch, updateProjectData }) => {
     if (confirmDelete) {
       try {
         await axios.delete(
-          `/auditor/delete-budget/${project._id}/${budget_id}`
+          `/auditor/budget/${project._id}/${budget_id}`
         );
         toast.success("Budget deleted successfully");
         setFetch((prev) => !prev); // Trigger re-fetch

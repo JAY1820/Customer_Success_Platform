@@ -40,7 +40,7 @@ const MomsClient = ({ project, setFetch, updateProjectData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`/projectmanager/create-moms/${project._id}`, formData);
+      const response = await axios.post(`/projectmanager/moms/${project._id}`, formData);
       if (response.status === 200) {
         toast.success(response.data.message);
         setFetch((prev) => !prev);
@@ -65,7 +65,7 @@ const MomsClient = ({ project, setFetch, updateProjectData }) => {
     const confirmDelete = window.confirm("Do you want to delete?");
     if (confirmDelete) {
       try {
-        const response = await axios.delete(`/projectmanager/delete-moms/${project._id}/${mom_id}`);
+        const response = await axios.delete(`/projectmanager/moms/${project._id}/${mom_id}`);
         toast.success(response.data.message);
         setFetch((prev) => !prev);
         updateProjectData();

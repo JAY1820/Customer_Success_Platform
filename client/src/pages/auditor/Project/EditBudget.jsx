@@ -35,7 +35,7 @@ function EditBudget({ budget, setFetch, updateProjectData }) {
   async function updateBudget(e) {
     e.preventDefault();
     try {
-      const response = await axios.put(`/auditor/edit-budget/${budget._id}`, formData);
+      const response = await axios.put(`/auditor/budget/${budget._id}`, formData);
       if (response.status === 200) {
         toast.success("Budget Edited successfully");
         setFetch((prev) => !prev);

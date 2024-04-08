@@ -47,7 +47,7 @@ const Resource = ({ project, setFetch, updateProjectData }) => {
     }
     try {
       const response = await axios.post(
-        `/projectmanager/create-resource/${project._id}`,
+        `/projectmanager/resource/${project._id}`,
         formData
       );
       if (response.status === 200) {
@@ -76,7 +76,7 @@ const Resource = ({ project, setFetch, updateProjectData }) => {
     if (confirmDelete) {
       try {
         const response = await axios.delete(
-          `/projectmanager/delete-resource/${project._id}/${resource_id}`
+          `/projectmanager/resource/${project._id}/${resource_id}`
         );
         toast.success(response.data.message);
         setFetch((prev) => !prev);

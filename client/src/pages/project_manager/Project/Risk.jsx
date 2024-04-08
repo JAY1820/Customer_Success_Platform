@@ -44,7 +44,7 @@ const Risk = ({ project, setFetch, updateProjectData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`/projectmanager/create-risk/${project._id}`, formData);
+      const response = await axios.post(`/projectmanager/risk/${project._id}`, formData);
       if (response.status === 200) {
         toast.success("Risk Profile Created successfully ");
         setFetch((prev) => !prev);
@@ -72,7 +72,7 @@ const Risk = ({ project, setFetch, updateProjectData }) => {
     const confirmDelete = window.confirm("Do you want to delete? ");
     if (confirmDelete) {
       try {
-        const response = await axios.delete(`/projectmanager/delete-risk/${project._id}/${risk_id}`);
+        const response = await axios.delete(`/projectmanager/risk/${project._id}/${risk_id}`);
         toast.success(response.data.message);
         setFetch((prev) => !prev);
         updateProjectData();

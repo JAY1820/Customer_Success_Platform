@@ -49,7 +49,7 @@ const Milestones = ({ project, setFetch, updateProjectData }) => {
     }
     try {
       const response = await axios.post(
-        `/projectmanager/create-milestone/${project._id}`,
+        `/projectmanager/milestone/${project._id}`,
         formData
       );
       if (response.status === 200) {
@@ -80,7 +80,7 @@ const Milestones = ({ project, setFetch, updateProjectData }) => {
     if (confirmDelete) {
       try {
         const response = await axios.delete(
-          `/projectmanager/delete-milestone/${project._id}/${milestone_id}`
+          `/projectmanager/milestone/${project._id}/${milestone_id}`
         );
         toast.success(response.data.message);
         setFetch((prev) => !prev);

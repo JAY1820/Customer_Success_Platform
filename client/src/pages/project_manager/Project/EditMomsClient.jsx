@@ -47,7 +47,7 @@ function EditMomsClient({ mom, setFetch , updateProjectData}) {
   async function updateMom(e) {
     e.preventDefault();
     try {
-      await axios.put(`/projectmanager/edit-moms/${mom._id}`, formData).then((res) => {
+      await axios.put(`/projectmanager/moms/${mom._id}`, formData).then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);
           setFetch((prev) => !prev);

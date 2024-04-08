@@ -58,7 +58,7 @@ function EditMilestone({ milestone, setFetch, updateProjectData }) {
     }
     try {
       await axios
-        .put(`/projectmanager/edit-milestone/${milestone._id}`, formData)
+        .put(`/projectmanager/milestone/${milestone._id}`, formData)
         .then((res) => {
           if (res.status === 200) {
             toast.success("Milestone edited successfully ");

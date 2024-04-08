@@ -54,7 +54,7 @@ const FinancialMatrix = ({ project, setFetch, updateProjectData }) => {
     e.preventDefault();
     try {
       await axios
-        .post(`/auditor/create-financialMatrix/${project._id}`, formData)
+        .post(`/auditor/financialMatrix/${project._id}`, formData)
         .then((res) => {
           if (res.status === 200) {
             setFetch((prev) => !prev);
@@ -81,7 +81,7 @@ const FinancialMatrix = ({ project, setFetch, updateProjectData }) => {
     if (a) {
       try {
         const response = await axios.delete(
-          `/auditor/delete-financialMatrix/${project._id}/${financialMatrix_id}`
+          `/auditor/financialMatrix/${project._id}/${financialMatrix_id}`
         );
         toast.success(response.data.message);
         setFetch((prev) => !prev);

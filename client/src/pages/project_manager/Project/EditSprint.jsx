@@ -35,7 +35,7 @@ function EditSprint({ sprint, setFetch, updateProjectData }) {
       return;
     }
     try {
-      await axios.put(`/projectmanager/edit-sprint/${sprint._id}`, formData).then((res) => {
+      await axios.put(`/projectmanager/sprint/${sprint._id}`, formData).then((res) => {
         if (res.status === 200) {
           toast.success("Sprint Edited successfully ");
           setFetch((prev) => !prev);

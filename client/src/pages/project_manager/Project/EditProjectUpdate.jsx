@@ -46,7 +46,7 @@ function EditProjectUpdate({ projectUpdate, setFetch, updateProjectData }) {
   async function updateProjectUpdate(e) {
     e.preventDefault();
     try {
-      await axios.put(`/projectmanager/edit-update/${projectUpdate._id}`, formData).then((res) => {
+      await axios.put(`/projectmanager/update/${projectUpdate._id}`, formData).then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);
           setFetch((prev) => !prev);

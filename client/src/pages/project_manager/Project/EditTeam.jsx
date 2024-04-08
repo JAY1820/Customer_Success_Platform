@@ -22,7 +22,7 @@ const customStyles = {
   },
 };
 
-Modal.setAppElement("#root"); // replace with your app's id
+Modal.setAppElement("#root"); 
 
 function EditTeam({ team, setFetch, updateProjectData }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,7 +49,7 @@ function EditTeam({ team, setFetch, updateProjectData }) {
   async function updateResource(e) {
     e.preventDefault();
     try {
-      await axios.put(`/projectmanager/edit-team/${team._id}`, formData).then((res) => {
+      await axios.put(`/projectmanager/team/${team._id}`, formData).then((res) => {
         if (res.status === 200) {
           toast.success(res.data.message);
           setFetch((prev) => !prev);

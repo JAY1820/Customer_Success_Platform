@@ -52,7 +52,7 @@ function EditResource({ resource, setFetch, updateProjectData }) {
     }
     try {
       await axios
-        .put(`/projectmanager/edit-resource/${resource._id}`, formData)
+        .put(`/projectmanager/resource/${resource._id}`, formData)
         .then((res) => {
           if (res.status === 200) {
             toast.success(res.data.message);

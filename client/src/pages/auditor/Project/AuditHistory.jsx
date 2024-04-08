@@ -57,7 +57,7 @@ const AuditHistory = ({ project, setFetch, updateProjectData }) => {
     e.preventDefault();
     try {
       await axios
-        .post(`/auditor/create-auditHistory/${project._id}`, formData)
+        .post(`/auditor/auditHistory${project._id}`, formData)
         .then((res) => {
           if (res.status === 200) {
             toast.success("Audit History Created successfully ");
@@ -87,7 +87,7 @@ const AuditHistory = ({ project, setFetch, updateProjectData }) => {
     if (a) {
       try {
         const response = await axios.delete(
-          `/auditor/delete-auditHistory/${project._id}/${auditHistory_id}`
+          `/auditor/auditHistory/${project._id}/${auditHistory_id}`
         );
         toast.success(response.data.message);
         setFetch((prev) => !prev);

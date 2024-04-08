@@ -51,7 +51,7 @@ const OperationalMatrix = ({ project, setFetch, updateProjectData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`/auditor/create-operationalMatrix/${project._id}`, formData)
+      await axios.post(`/auditor/operationalMatrix/${project._id}`, formData)
         .then((res) => {
           if (res.status === 200) {
             setFetch((prev) => !prev);
@@ -77,7 +77,7 @@ const OperationalMatrix = ({ project, setFetch, updateProjectData }) => {
     if (a) {
       try {
         const response = await axios.delete(
-          `/auditor/delete-operationalMatrix/${project._id}/${operationalMatrix_id}`
+          `/auditor/operationalMatrix/${project._id}/${operationalMatrix_id}`
         );
         toast.success(response.data.message);
         setFetch((prev) => !prev);

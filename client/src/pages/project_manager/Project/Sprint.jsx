@@ -46,7 +46,7 @@ const Sprint = ({ project, setFetch, updateProjectData }) => {
       return;
     }
     try {
-      const response = await axios.post(`/projectmanager/create-sprint/${project._id}`, formData);
+      const response = await axios.post(`/projectmanager/sprint/${project._id}`, formData);
       if (response.status === 200) {
         toast.success("Sprint Created successfully ");
         setFetch((prev) => !prev);
@@ -72,7 +72,7 @@ const Sprint = ({ project, setFetch, updateProjectData }) => {
     const confirmDelete = window.confirm("Do you want to delete? ");
     if (confirmDelete) {
       try {
-        const response = await axios.delete(`/projectmanager/delete-sprint/${project._id}/${sprint_id}`);
+        const response = await axios.delete(`/projectmanager/sprint/${project._id}/${sprint_id}`);
         toast.success(response.data.message);
         setFetch((prev) => !prev);
         updateProjectData();
