@@ -12,21 +12,21 @@ import {
 } from "monday-ui-react-core";
 
 // Import the necessary components from the project_manager and auditor folders
-import ProjectOverview from "../auditor/Project/ProjectOverview";
-import Budget from "../auditor/Project/Budget";
-import Stakeholder from "../auditor/Project/stakeholder";
-import Sprint from "../project_manager/Project/Sprint";
-import Milestone from "../project_manager/Project/Milestones";
-import Resource from "../project_manager/Project/Resource";
-import TeamPhase from "../project_manager/Project/Team";
-import MomsClient from "../project_manager/Project/MomsClient";
-import ClientFeedback from "../project_manager/Project/ClientFeeback";
-import RiskProfile from "../project_manager/Project/Risk";
-import AuditHistory from "../auditor/Project/AuditHistory";
-import VersionHistory from "../auditor/Project/VersionHistory";
-import FinancialMatrix from "../auditor/Project/FinancialMatrix";
-import OperationalMatrix from "../auditor/Project/OperationalMatrix";
-import TechnicalMatrix from "../auditor/Project/TechnicalMatrix";
+import ProjectOverview from "../Project/ProjectOverview/ProjectOverview";
+import Milestone from "../Project/Milestones/Milestones";
+import Budget from "../Project/Budget/Budget";
+import Stakeholder from "../Project/Stakeholder/stakeholder";
+import Sprint from "../Project/Sprint/Sprint";
+import Resource from "../Project/TeamResource/Resource";
+import TeamPhase from "../Project/Team/Team";
+import MomsClient from "../Project/MomsClient/MomsClient";
+import ClientFeedback from "../Project/Feedback/EditClientFeeback";
+import RiskProfile from "../Project/Risk/Risk";
+import AuditHistory from "../Project/Audit/AuditHistory";
+import VersionHistory from "../Project/VersionHistory/VersionHistory";
+import FinancialMatrix from "../Project/Matrix/FinancialMatrix";
+import OperationalMatrix from "../Project/Matrix/OperationalMatrix";
+import TechnicalMatrix from "../Project/Matrix/TechnicalMatrix";
 
 function EscalationMatix({ project, setFetch, updateProjectData }) {
   return (

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import EditProject from "./EditProject";
+import EditProject from "../Project/ProjectOverview/EditProject";
 import { FiEye, FiDownload, FiTrash2 } from "react-icons/fi";
 import { saveAs } from "file-saver";
 

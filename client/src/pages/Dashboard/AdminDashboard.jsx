@@ -3,15 +3,14 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { toast } from "react-toastify";
 import { RingLoader } from "react-spinners";
 import "react-toastify/dist/ReactToastify.css";
-import { Button } from "monday-ui-react-core";
 import axios from "axios";
 
-import CreateProject from "./CreateProject";
-import DisplayProjects from "./DisplayProjects";
-import ProjectDetails from "./ProjectDetails";
-import Adduser from "../admin/adduserform";
+import CreateProject from "../Project/ProjectOverview/CreateProject";
+import DisplayProjects from "../DisplayProjects/AdminDisplayProjects";
+import ProjectDetails from "../ProjectDetails/AdminProjectDetails";
+import Adduser from "../User/AddUserForm";
 
-const AuditorDashboard = () => {
+const AdminDashboard = () => {
   const { getAccessTokenSilently, isLoading, isAuthenticated } = useAuth0();
   const [token, setToken] = useState(null);
   const [fetch, setFetch] = useState(false);
@@ -81,27 +80,10 @@ const AuditorDashboard = () => {
       style={{ maxHeight: "calc(100vh - 100px)" }}
     >
       <h1 className="text-4xl font-bold text-center mt-10 mb-10">
-        Auditor Dashboard
+        Admin Dashboard
       </h1>
 
       {/* create proejct  */}
-      {!project && (
-        <div className="flex justify-start items-center space-x-4 mb-5">
-          <button
-            className="bg-blue-500 text-white py-2 px-2 rounded-md hover:bg-blue-600"
-            onClick={toggleCreateProjectModal}
-          >
-            Create Project
-          </button>
-
-          <button
-            className="bg-blue-500 text-white py-2 px-2 ml-5 rounded-md hover:bg-blue-600"
-            onClick={() => setShowAddUser(true)}
-          >
-            Add User
-          </button>
-        </div>
-      )}
 
       {/* add user  */}
       {showAddUser && (
@@ -123,6 +105,24 @@ const AuditorDashboard = () => {
           >
             <Adduser fetch={fetch} />
           </div>
+        </div>
+      )}
+
+      {!project && (
+        <div className="flex justify-start items-center space-x-4 mb-5">
+          <button
+            className="bg-blue-500 text-white py-2 px-2 ml-5 rounded-md hover:bg-blue-600"
+            onClick={() => setShowAddUser(true)}
+          >
+            Add User
+          </button>
+
+          <button
+            className="bg-blue-500 text-white py-2 px-2 rounded-md hover:bg-blue-600"
+            onClick={toggleCreateProjectModal}
+          >
+            Create Project
+          </button>
         </div>
       )}
 
@@ -152,4 +152,4 @@ const AuditorDashboard = () => {
   );
 };
 
-export default AuditorDashboard;
+export default AdminDashboard;

@@ -11,14 +11,14 @@ import {
   TabPanel,
 } from "monday-ui-react-core";
 
-import ProjectOverview from "./Project/ProjectOverview";
-import Budget from "./Project/Budget";
-import Stakeholder from "./Project/stakeholder";
-import AuditHistory from "./Project/AuditHistory";
-import VersionHistory from "./Project/VersionHistory";
-import FinancialMatrix from "./Project/FinancialMatrix";
-import OperationalMatrix from "./Project/OperationalMatrix";
-import TechnicalMatrix from "./Project/TechnicalMatrix";
+import ProjectOverview from "../Project/ProjectOverview/ProjectOverview";
+import Budget from "../Project/Budget/Budget";
+import Stakeholder from "../Project/Stakeholder/stakeholder";
+import AuditHistory from "../Project/Audit/AuditHistory";
+import VersionHistory from "../Project/VersionHistory/DisplayVersionHistory";
+import FinancialMatrix from "../Project/Matrix/FinancialMatrix";
+import OperationalMatrix from "../Project/Matrix/OperationalMatrix";
+import TechnicalMatrix from "../Project/Matrix/TechnicalMatrix";
 
 function EscalationMatix({ project, setFetch, updateProjectData }) {
   return (

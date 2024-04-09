@@ -14,17 +14,17 @@ import {
 } from "monday-ui-react-core";
 
 // import file
-import ProjectOverview from "../auditor/Project/ProjectOverview";
-import RiskProfile from "./Project/Risk";
-import Sprint from "./Project/Sprint";
-import Milestone from "./Project/Milestones";
-import Resource from "./Project/Resource";
-import ProjectUpdate from "./Project/ProjectUpdate";
-import Stakeholder from "./Project/DisplayStackholder";
-import AuditHistory from "./Project/DisplayAudithistory";
-import TeamPhase from "./Project/Team";
-import MomsClient from "./Project/MomsClient";
-import ClientFeedback from "./Project/ClientFeeback";
+import ProjectOverview from "../Project/ProjectOverview/ProjectOverview";
+import RiskProfile from "../Project/Risk/Risk";
+import Sprint from "../Project/Sprint/Sprint";
+import Milestone from "../Project/Milestones/Milestones";
+import Resource from "../Project/TeamResource/Resource";
+import ProjectUpdate from "../Project/ProjectUpdate/ProjectUpdate";
+import Stakeholder from "../Project/Stakeholder/DisplayStackholder";
+import AuditHistory from "../Project/Audit/DisplayAudithistory";
+import TeamPhase from "../Project/Team/Team";
+import MomsClient from "../Project/MomsClient/MomsClient";
+import ClientFeedback from "../Project/Feedback/EditClientFeeback";
 
 function ProjectDetails({ onClose, project, updateProjectData }) {
   const [fetch, setFetch] = useState(false);

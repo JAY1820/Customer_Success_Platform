@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import DisplayProjects from "./DisplayProjects";
-import ProjectDetails from "./ProjectDetails";
+import DisplayProjects from "../DisplayProjects/ClientDisplayProjects";
+import ProjectDetails from "../ProjectDetails/ClientProjectDetails";
 import axios from "axios"; // Import axios
 
-const PmDashboard = () => {
+const ClientDashboard = () => {
   const { getAccessTokenSilently, isLoading, isAuthenticated, user } = useAuth0();
-  const [projectManagerEmail, setProjectManagerEmail] = useState(null);
+  const [clientEmail, setClientEmail] = useState(null);
   const [token, setToken] = useState(null);
   const [fetch, setFetch] = useState(false);
   const [project, setProject] = useState(null);
@@ -19,7 +19,7 @@ const PmDashboard = () => {
         try {
           const temp = await getAccessTokenSilently();
           setToken(temp); // Set token
-          setProjectManagerEmail(user.email);
+          setClientEmail(user.email);
         } catch (error) {
           console.error("Error fetching email:", error);
         }
@@ -50,7 +50,7 @@ const PmDashboard = () => {
   const updateProjectData = async () => {
     try {
       const response = await axios.get(
-        `/projectmanager/fetch-project/${project._id}`, // Corrected route
+        `/client/fetch-project/${project._id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -68,7 +68,7 @@ const PmDashboard = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-4xl font-bold text-center mt-10 mb-10">Project Manager Dashboard</h1>
+      <h1 className="text-4xl font-bold text-center mt-10 mb-10">Client Dashboard</h1>
       <div className="font-semibold">
         <div>
           <h1 className="text-lg  mb-4">Project Display</h1>
@@ -77,7 +77,7 @@ const PmDashboard = () => {
               fetch={fetch}
               setFetch={setFetch}
               onViewMore={openProjectDetails}
-              projectmanageremail={projectManagerEmail}
+              clientEmail={clientEmail}
             />
           )}
         </div>
@@ -93,4 +93,4 @@ const PmDashboard = () => {
   );
 };
 
-export default PmDashboard;
+export default ClientDashboard;

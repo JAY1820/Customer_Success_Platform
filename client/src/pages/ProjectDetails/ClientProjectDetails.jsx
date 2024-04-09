@@ -14,12 +14,12 @@ import {
 } from "monday-ui-react-core";
 
 // import components
-import Stakeholder from "../project_manager/Project/DisplayStackholder";
-import AuditHistory from "../project_manager/Project/DisplayAudithistory";
-import VersionHistory from "./DisplayVersionHistory";
-import ProjectUpdate from "./DisplayProjectUpdates";
-import ClientFeedback from "./ClientFeedback";
-import MomsClient from "./MomsClient";
+import Stakeholder from "../Project/Stakeholder/DisplayStackholder";
+import AuditHistory from "../Project/Audit/DisplayAudithistory";
+import VersionHistory from "../Project/VersionHistory/DisplayVersionHistory";
+import ProjectUpdate from "../Project/ProjectUpdate/DisplayProjectUpdates";
+import ClientFeedback from "../Project/Feedback/ClientFeedback";
+import MomsClient from "../Project/Milestones/DisplayMomsClient";
 
 function ProjectDetails({ onClose, project, updateProjectData }) {
   const [fetch, setFetch] = useState(false);

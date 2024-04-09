@@ -5,12 +5,11 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./components/Home";
 import Header from "./components/Header"; 
 import Layout from './components/Layout';
-import UserLogin from './pages/UserLogin';
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AuditorDashboard from "./pages/auditor/AuditorDashboard";
-import ClientDashboard from "./pages/client/ClientDashboard";
-import PmDashboard from "./pages/project_manager/Pmdashboard";
-import "./App.css";
+import UserLogin from './pages/User/UserLogin';
+import AdminDashboard from "./pages/Dashboard/AdminDashboard";
+import AuditorDashboard from "./pages/Dashboard/AuditorDashboard";
+import ClientDashboard from "./pages/Dashboard/ClientDashboard";
+import PmDashboard from "./pages/Dashboard/Pmdashboard";
 
 axios.defaults.baseURL = 'http://localhost:4004';
 axios.defaults.withCredentials = true;
